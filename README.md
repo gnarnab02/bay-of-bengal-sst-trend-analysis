@@ -50,6 +50,5 @@ doi: https://doi.org/10.54905/disssi.v11i30.e12cc3137
 ## Author
 
 Arnab Guha Neogi
-Arnab Guha Neogi
 Department of Oceanography
 University of Dhaka
