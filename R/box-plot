@@ -1,0 +1,13 @@
+library(readxl)
+library(ggplot2)
+library(lubridate) 
+data <- read_excel("E:/RESEARCH/SST changing in last 20 years/nasa-1.xlsx")
+data$month <- month(data$time, label = TRUE)  # label = Jan, Feb, etc.
+ggplot(data, aes(x = month, y = mean_MODISA_L3m_SST_8d_4km_R2019_0_sst)) +
+  geom_boxplot(fill = "skyblue", color = "darkblue") +
+  labs(
+    title = "Distribution of Sea Surface Temperature by Month",
+    x = "Month",
+    y = "Mean SST (?C)"
+  ) +
+  theme_minimal()
