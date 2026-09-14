@@ -1,0 +1,41 @@
+library(ncdf4)
+library(RColorBrewer)
+library(maps)
+nc <- nc_open("2c174e8c83f653b281e28412d92417a6.nc")
+lon <- ncvar_get(nc, "longitude")
+lat <- ncvar_get(nc, "latitude")
+sst <- ncvar_get(nc, "sst")  -273.15
+nc_close(nc)
+sst[sst > 1e10] <- NA  
+n_months <- dim(sst)[3] 
+seasons <- list(
+  WINTER = c(12, 1, 2),
+  SPRING = c(3, 4, 5),
+  SUMMER= c(6, 7, 8),
+  AUTUMN = c(9, 10, 11)
+)
+get_season_mean <- function(season_vec) {
+  indices <- which((1:n_months %% 12) %in% (season_vec %% 12))
+  apply(sst[,,indices], c(1,2), mean, na.rm = TRUE)
+}
+
+plot_season <- function(season_name) {
+  sst_season <- get_season_mean(seasons[[season_name]])
+  lon_order <- order(lon)
+  lat_order <- order(lat)
+  
+  lon_sorted <- lon[lon_order]
+  lat_sorted <- lat[lat_order]
+  sst_sorted <- sst_season[lon_order, lat_order] 
+  image.plot(
+    lon_sorted, lat_sorted, sst_sorted,
+    col = rev(brewer.pal(11, "Spectral")),
+    xlab = "Longitude", ylab = "Latitude",
+    main = paste("Seasonal Mean SST -", season_name),
+    legend.lab = "SST (\u00B0C)", legend.line = 2.5
+  )
+  map("worldHires", add = TRUE, col = "black", lwd = 0.5)
+}
+plot_season("SPRING")
+
+
