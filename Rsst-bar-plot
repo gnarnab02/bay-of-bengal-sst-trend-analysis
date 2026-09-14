@@ -1,0 +1,12 @@
+library(readxl)
+library(ggplot2)
+data <- read_excel("nasa-1.xlsx")
+ggplot(data, aes(x = time, y = mean_MODISA_L3m_SST_8d_4km_R2019_0_sst)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(
+    title = "Sea Surface Temperature Over Time (Bar Plot)",
+    x = "Date",
+    y = "Mean SST (?C)"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  
