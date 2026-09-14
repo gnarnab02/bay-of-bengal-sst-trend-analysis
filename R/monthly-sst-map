@@ -1,0 +1,60 @@
+library(ncdf4)
+library(raster)
+library(fields)
+nc <- nc_open("2c174e8c83f653b281e28412d92417a6.nc")
+lon <- ncvar_get(nc, "longitude")
+lat <- ncvar_get(nc, "latitude")
+sst_array <- ncvar_get(nc, "sst") -273.15
+plot_month <- function(month_index) {
+  if (month_index < 1 || month_index > dim(sst_array)[3]) {
+    stop("Invalid month index! Please choose between 1 and ", dim(sst_array)[3])
+  }
+  
+  month_names <- c("January", "February", "March", "April", "May", "June",
+                   "July", "August", "September", "October", "November", "December")
+  
+  sst_month <- sst_array[,,month_index]
+  
+  if (lat[1] > lat[length(lat)]) {
+    lat <- rev(lat)
+    sst_month <- sst_month[, ncol(sst_month):1]
+  }
+  
+  image.plot(lon, lat, sst_month,
+             main = paste("Sea Surface Temperature -", month_names[(month_index-1) %% 12 + 1]),
+             xlab = "Longitude", ylab = "Latitude",
+             col = tim.colors(64))
+}
+plot_month(1)   
+plot_month(2)   
+plot_month(3)  
+plot_month(4)   
+plot_month(5)   
+plot_month(6)
+plot_month(7)  
+plot_month(8)   
+plot_month(9)
+plot_month(10)   
+plot_month(11)   
+plot_month(12)
+
+#for putting boundary and coastline
+library(ncdf4)
+library(maps)
+library(mapdata)
+library(viridis)
+nc <- nc_open("2c174e8c83f653b281e28412d92417a6.nc")
+lon <- ncvar_get(nc, "longitude")
+lat <- ncvar_get(nc, "latitude")
+sst <- ncvar_get(nc, "sst")  
+nc_close(nc)
+month_index <- 4 
+sst_month <- sst[,,month_index]
+col_palette <- viridis(100)
+image(lon, lat, sst_month,
+      col = col_palette,
+      xlab = "Longitude", ylab = "Latitude",
+      main = "Sea Surface Temperature - January")
+map("worldHires", add = TRUE, col = "black", lwd = 0.7)
+box()
+
