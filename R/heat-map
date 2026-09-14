@@ -1,0 +1,20 @@
+library(readxl)
+library(ggplot2)
+library(lubridate)
+library(dplyr)
+data <- read_excel("nasa-1.xlsx")
+data <- data %>%
+  mutate(
+    Year = year(time),
+    Month = month(time, label = TRUE)  
+  )
+ggplot(data, aes(x = Year, y = Month, fill = mean_MODISA_L3m_SST_8d_4km_R2019_0_sst)) +
+  geom_tile(color = "green") +
+  scale_fill_viridis_c(option = "plasma") +
+  labs(
+    title = "Monthly Sea Surface Temperature Heatmap",
+    x = "Year",
+    y = "Month",
+    fill = "Mean SST (?C)"
+  ) +
+  theme_minimal()
