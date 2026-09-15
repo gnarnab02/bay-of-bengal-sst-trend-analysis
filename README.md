@@ -37,8 +37,6 @@ The analysis uses:
 
 - `R/` — R analysis scripts
 - `figures/` — selected figures
-- `results/` — derived results
-- `data/` — information about data sources
 
 ## Publication
 
